@@ -40,11 +40,11 @@ fi
 if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-config.php" ]]; then
   cd "${VVV_PATH_TO_SITE}/public_html"
   echo "Configuring WordPress trunk..."
-  noroot wp config create --dbname="${DB_NAME}" --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
+  noroot wp core config --dbname="${DB_NAME}" --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
 define( 'WP_DEBUG', true );
 define( 'SCRIPT_DEBUG', true );
 PHP
-  mv ./src/wp-config.php ./wp-config.php
+  mv ./build/wp-config.php ./wp-config.php
 fi
 
 if ! $(noroot wp core is-installed); then
