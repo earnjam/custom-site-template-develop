@@ -20,25 +20,30 @@ touch ${VVV_PATH_TO_SITE}/log/access.log
 
 # Install and configure the latest stable version of WordPress
 if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/src/wp-load.php" ]]; then
-  echo "Checking out WordPress trunk. See https://develop.svn.wordpress.org/trunk"
-  noroot svn checkout "https://develop.svn.wordpress.org/trunk/" "${VVV_PATH_TO_SITE}/public_html"
+  echo "Cloning WordPress trunk. See https://github.com/WordPress/wordpress-develop"
+  noroot git clone git@github.com:earnjam/wordpress-develop.git "${VVV_PATH_TO_SITE}/public_html"
   cd "${VVV_PATH_TO_SITE}/public_html"
+  noroot git remote add upstream git@github.com:WordPress/wordpress-develop.git
   noroot npm install
 else
   cd "${VVV_PATH_TO_SITE}/public_html"
-  echo "Updating WordPress trunk. See https://develop.svn.wordpress.org/trunk"
-  noroot svn up
+    if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
+      noroot git pull --no-edit upstream master
+    else
+      echo "Skip auto git pull since not on master branch"
+    fi
   noroot npm install &>/dev/null
   noroot grunt
 fi
 
-if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/src/wp-config.php" ]]; then
+if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-config.php" ]]; then
   cd "${VVV_PATH_TO_SITE}/public_html"
   echo "Configuring WordPress trunk..."
-  noroot wp core config --dbname="${DB_NAME}" --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
+  noroot wp config create --dbname="${DB_NAME}" --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
 define( 'WP_DEBUG', true );
 define( 'SCRIPT_DEBUG', true );
 PHP
+  mv ./src/wp-config.php ./wp-config.php
 fi
 
 if ! $(noroot wp core is-installed); then
