@@ -21,8 +21,9 @@ touch ${VVV_PATH_TO_SITE}/log/access.log
 # Install and configure the latest stable version of WordPress
 if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/src/wp-load.php" ]]; then
   echo "Cloning WordPress trunk. See https://github.com/WordPress/wordpress-develop"
-  noroot git clone git@github.com:earnjam/wordpress-develop.git "${VVV_PATH_TO_SITE}/public_html"
+  noroot git clone git://develop.git.wordpress.org/ "${VVV_PATH_TO_SITE}/public_html"
   cd "${VVV_PATH_TO_SITE}/public_html"
+  noroot git remote set-url origin git@github.com:earnjam/wordpress-develop.git
   noroot git remote add upstream git@github.com:WordPress/wordpress-develop.git
   noroot npm install
 else
