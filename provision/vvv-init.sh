@@ -24,7 +24,7 @@ if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/src/wp-load.php" ]]; then
   noroot git clone git://develop.git.wordpress.org/ "${VVV_PATH_TO_SITE}/public_html"
   cd "${VVV_PATH_TO_SITE}/public_html"
   noroot git remote set-url origin git@github.com:earnjam/wordpress-develop.git
-  noroot git remote add upstream git@github.com:WordPress/wordpress-develop.git
+  noroot git remote add upstream git://develop.git.wordpress.org/
   noroot npm install
   noroot grunt
 else
