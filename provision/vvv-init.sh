@@ -26,6 +26,7 @@ if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/src/wp-load.php" ]]; then
   noroot git remote set-url origin git@github.com:earnjam/wordpress-develop.git
   noroot git remote add upstream git@github.com:WordPress/wordpress-develop.git
   noroot npm install
+  noroot grunt
 else
   cd "${VVV_PATH_TO_SITE}/public_html"
     if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
